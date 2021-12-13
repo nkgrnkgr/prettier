@@ -152,12 +152,14 @@ function genericPrint(path, options, print) {
         value = indent([hardline, dedent(value)]);
       }
 
+      const flg = Boolean(node.value.text && node.value.text.startsWith("@prettier-placeholder-"))
+
       return [
         node.raws.before.replace(/[\s;]/g, ""),
         insideICSSRuleNode(path) ? node.prop : maybeToLowerCase(node.prop),
         trimmedBetween.startsWith("//") ? " " : "",
         trimmedBetween,
-        node.extend ? "" : " ",
+        node.extend ? "" : (flg && isColon) ? "" :  " ",
         isLessParser(options) && node.extend && node.selector
           ? ["extend(", print("selector"), ")"]
           : "",
